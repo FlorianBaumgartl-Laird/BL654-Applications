@@ -3112,12 +3112,12 @@ function _atPlusSIO(byval actType, byref cmdStr$, byref rspBuf$)
 endfunc rc
 
 //------------------------------------------------------------------------------
-//:/ at+lscn<timeout_seconds><,"escaped_pattern"><,rssi><,scantype>
+//:/ at+lscn<timeout_seconds><,"escaped_pattern"><,rssi><,scantype><format>
 //:/ at+lscn<x>
 //------------------------------------------------------------------------------
 function _atPlusLSCN(byref cmdStr$, byref rspBuf$)
     sArg$[0] = ""
-    rc = ExtractArgsCSV(cmdStr$, args, 0, 4)
+    rc = ExtractArgsCSV(cmdStr$, args, 0, 5)
     if rc != RSP_OK then
         exitfunc rc
     endif
@@ -3155,6 +3155,14 @@ function _atPlusLSCN(byref cmdStr$, byref rspBuf$)
     rc = SArgConvertToInt(3, SCANTYPE_1MPHY, 1, SCANTYPE_ALL)
     if rc != RSP_OK then
         exitfunc rc
+    endif
+
+    //Get format into nArg[4]
+    rc = SArgConvertToInt(4, 0, 0, 1)
+    if rc != RSP_OK then
+        exitfunc rc
+    else
+        scnFmt = nArg[4]
     endif
 
     //And now start scanning
